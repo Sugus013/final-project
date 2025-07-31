@@ -1,0 +1,40 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          echo "StrictHostKeyChecking no" > ~/.ssh/config
+
+      - name: Deploy via SSH
+        run: |
+          ssh -i ~/.ssh/deploy_key ubuntu@${{ secrets.HOST }} << 'EOF'
+            cd ~/final-project
+
+            echo "[1/4] Pulling latest code from GitHub..."
+            git pull origin main
+
+            echo "[2/4] Restarting backend with pm2..."
+            pm2 restart backend || pm2 start index.js --name backend
+
+            echo "[3/4] Building frontend..."
+            cd client
+            npm ci
+            npm run build
+
+            echo "[4/4] Deployment done!"
+          EOF
