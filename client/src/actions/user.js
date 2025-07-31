@@ -1,7 +1,8 @@
 import axios from "axios";
 import * as types from "../actions/types";
 
-const URL = "https://mern-auth-starter.herokuapp.com";
+//const URL = "https://mern-auth-starter.herokuapp.com";
+const URL = process.env.REACT_APP_API;
 
 export const register = (username, email, password) => async (dispatch) => {
   try {
@@ -15,21 +16,18 @@ export const register = (username, email, password) => async (dispatch) => {
       },
     };
 
-    const res = await axios.post(
-      `${URL}/api/user/register`,
-      {
-        username,
-        email,
-        password,
-      },
-      config
-    );
+    const res = await axios.post(`${URL}/api/user/register`, {
+      username,
+      email,
+      password
+        }, config);
+
 
     dispatch({ type: types.USER_REGISTER_SUCCESS, payload: res.data });
   } catch (error) {
     dispatch({
       type: types.USER_REGISTER_FAIL,
-      payload: error.response.data,
+      payload: error.response?.data?.message || "Something went wrong",
     });
   }
 };

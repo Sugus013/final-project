@@ -54,7 +54,7 @@ const register = async (req, res) => {
     };
 
     // eslint-disable-next-line no-unused-vars
-    const sendEmail = await sgMail.send(mail);
+    //const sendEmail = await sgMail.send(mail);
 
     return res.status(200).json({
       message: `A verification mail has been sent to ${email}`,
@@ -101,7 +101,7 @@ const resend = async (req, res) => {
     };
 
     // eslint-disable-next-line no-unused-vars
-    const sendEmail = await sgMail.send(mail);
+    //const sendEmail = await sgMail.send(mail);
 
     return res.status(200).json({
       message: `A verification mail has been sent to ${email}`,
@@ -287,7 +287,7 @@ const forgot = async (req, res) => {
     };
 
     // eslint-disable-next-line no-unused-vars
-    const sendEmail = await sgMail.send(mail);
+    //const sendEmail = await sgMail.send(mail);
 
     return res.status(200).json({
       message: `A password reset mail has been sent to ${email}`,
